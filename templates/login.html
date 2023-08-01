@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Question Answering System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="static/style_register.css">
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <nav class="navbar navbar-expand-lg" style="background-color:rgb(0, 51, 102)">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#" style="color:white">
+           Get Your Answers Here
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+               <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#" style="color:white">Home</a>
+               </li>
+               <li class="nav-item">
+                <a class="nav-link" href="\login" style="color:white">Login</a>
+               </li>
+               <li class="nav-item">
+                <a class="nav-link" href="\register" style="color:white">Sign Up</a>
+               </li>
+            </ul>
+          </div>
+       </div>
+     </nav>
+     <section class="vh-100" >
+        <div class="container py-5 h-100" >
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+              <div class="card shadow-2-strong" style="border-radius: 1rem; background-color:rgb(0, 51, 102);">
+                <div class="card-body p-5 ">
+      
+                  <h3 class="mb-5 text-white text-center">Sign in</h3>
+      
+                  <div class="form-outline mb-4">
+                    <label class="form-label text-white" for="typeEmailX-2">Email</label>         
+                    <input type="email" id="typeEmailX-2" class="form-control form-control-lg"placeholder="Enter your email" />                  
+                  </div>
+      
+                  <div class="form-outline mb-4">
+                    <label class="form-label text-white" for="typePasswordX-2">Password</label>
+                    <input type="password" id="typePasswordX-2" class="form-control form-control-lg" placeholder="Enter your Password" />                  
+                  </div>
+
+                  <p class="small fw-bold mt-2 pt-1 mb-0 "style="color: white;">Don't have an account? <a href="/register"
+                    class="link-danger">Register</a></p>
+                  <!-- Checkbox -->
+                  <div class="form-check d-flex justify-content-start mb-4 mt-4">
+                    <input class="form-check-input" type="checkbox" value="" id="form1Example3" />
+                    <label class="form-check-label text-white" for="form1Example3"> Remember password </label>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <button class="btn btn-outline-warning btn-lg btn-block " type="submit">Login</button>
+                </div>
+                <hr class="my-4">
+      
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+</body>
+</html>
