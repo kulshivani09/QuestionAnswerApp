@@ -5,13 +5,14 @@
     <title>Question Answering System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link rel="stylesheet" href="static/style_register.css">
-    <style>
-      /* Define styles for flash messages based on their categories */
+    <!-- <style>
+       Define styles for flash messages based on their categories */
       .flash-success { color:white; }
-      /* .flash-error { color: red; }
+      .flash-error { color: red; }
       .flash-warning { color: orange; }
-      .flash-info { color: blue; } */
-  </style>
+      .flash-info { color: blue; }  
+  </style> -->
+  
 </head>
 <body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
@@ -38,36 +39,21 @@
           </div>
        </div>
      </nav>
-     
-     <!-- <div class="row">
-        <div class="mx-auto col-10 col-md-8 col-lg-6 ">
-            <form class="form-example" action="" method="post">
-             <h1 class="text-center mt-5">Register User</h1>
-                <div class="form-group mt-5 ">
-                  <div class="width_manage">       
-                    <label for="exampleName">Full Name</label>
-                    <input type="text" class="form-control" id="exampleName" aria-describedby="nameHelp" placeholder="Enter your Name">
-                  </div>
-                  <div class="width_manage" style="padding-top: 15px;">       
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                  </div>
-                </div>
-                <div class="form-group mt-3">
-                  <div class="width_manage">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                  </div>
-                </div>
-                <div class="form-group form-check mt-3">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                </div>
-                <button type="submit" class="btn btn-success mt-5">Submit</button>
-            </form>
-        </div>
-     </div> -->
+     {% with messages = get_flashed_messages() %}
+        {% for message in messages %} 
+          {% if message=='User already exists with this mail id' %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              {{messages}}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% elif message=='Registration successful! You can now log in.' %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{messages}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          {% endif %}
+        {% endfor %}
+     {% endwith %}
      <section class="vh-100" >
       <div class="container py-5 h-100" >
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -78,17 +64,17 @@
                 <form action="/register" method="post">
                   <div class="form-outline mb-4">
                     <label class="form-label text-white" >Name</label>
-                    <input type="text" id="fullname" class="form-control form-control" name="full_name" placeholder="Enter your Full Name" />                  
+                    <input type="text" id="fullname" class="form-control form-control" name="full_name" placeholder="Enter your Full Name" required />                  
                   </div>
       
                   <div class="form-outline mb-4">
                     <label class="form-label text-white" for="typeEmailX-2">Email</label>         
-                    <input type="email" id="typeEmailX-2" name="email_id" class="form-control form-control"placeholder="Enter your email" />                  
+                    <input type="email" id="typeEmailX-2" name="email_id" class="form-control form-control"placeholder="Enter your email" required/>                  
                   </div>
       
                   <div class="form-outline mb-4">
                     <label class="form-label text-white" for="typePasswordX-2">Password</label>
-                    <input type="password" id="typePasswordX-2" name="password" class="form-control form-control" placeholder="Enter your Password" />                  
+                    <input type="password" id="typePasswordX-2" name="password" class="form-control form-control" placeholder="Enter your Password" required />                  
                   </div>
 
                   <div class="text-center">
@@ -96,15 +82,7 @@
                   </div>
                 </form>
               </div> 
-              {% with messages = get_flashed_messages() %}
-  {% if messages %}
-      <ul>
-          {% for message in messages %}
-              <li class="flash-success">{{ message }}</li>
-          {% endfor %}
-      </ul>
-  {% endif %}
-{% endwith %}
+             
               <hr class="my-4">
    
               
