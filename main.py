@@ -17,7 +17,7 @@ migrate=Migrate(app,db)
 #flask_login stuff
 login_manager=LoginManager()
 login_manager.init_app(app)
-login_manager.login_view='/login'
+login_manager.login_view='login'
 
 @login_manager.user_loader
 def load_user(email_id):
@@ -30,6 +30,7 @@ class User(db.Model,UserMixin):
     name=db.Column(db.String(50),nullable=False)
     password=db.Column(db.String(50),nullable=False)
     date_registered=db.Column(db.Date)
+    questions=db.relationship('Questions',backref='user')
 
     def get_id(self):
         return str(self.email)
@@ -40,20 +41,37 @@ class User(db.Model,UserMixin):
         self.password=password
         self.date_registered=date.today()
 
+class Questions(db.Model):
+    __tablename__ ='Questions'
+    ques_id=db.Column(db.Integer,primary_key=True)
+    description=db.Column(db.String(600),nullable=False)
+    ques_posted_date=db.Column(db.Date)
+    email=db.Column(db.String(50),db.ForeignKey('User.email'),nullable=False)
+
+    def __init__(self,description,email):
+        self.description=description
+        self.ques_posted_date=date.today()
+        self.email=email
+
+
 #login
 @app.route("/login",methods=['GET','POST'])
 def login():
-    if request.method=='POST':
-        print("Request received for login(post)")
-        email=request.form['email_id']
-        password=request.form['password']
-        user=User.query.get(email)
-        if user is not None:
-            print('User found')
-            if user.password==password:
-                login_user(user)
-                print('inside password')
-                return redirect(url_for('homepage'))
+    try:
+        if request.method=='POST':
+            email=request.form['email_id']
+            password=request.form['password']
+            user=User.query.get(email)
+            if user is not None:
+                if user.password==password:
+                    login_user(user)
+                    return redirect(url_for('homepage'))
+                else:
+                    flash("Please enter correct password..")
+            else:
+                flash("User is not registered..Please register to login")
+    except Exception as e:
+        print(e)
     return render_template('login.html')
 
 #register
@@ -64,24 +82,46 @@ def register():
             email=request.form['email_id']
             name=request.form['full_name']
             password=request.form['password']
-            user=User(email,name,password)
-            print(user.name)
-            db.session.add(user)
-            db.session.commit()
-            flash('Registration successful! You can now log in.', 'success')
+            user=User.query.get(email)
+            if user is not None:
+                flash('User already exists with this mail id')
+            else:
+                user1=User(email,name,password)
+                print(user1.name)
+                db.session.add(user1)
+                db.session.commit()
+                flash('Registration successful! You can now log in.', 'success')
+                return render_template('login.html')
     except IntegrityError as e:
         flash('User already exists with this mail id', 'error')
-        
+    
     return render_template('register.html')
 
-#home
+#add question
+@app.route("/addQuestion",methods=['GET','POST']) 
+@login_required
+def add_question():
+    try:
+        if request.method=='POST':
+            user_ques=request.form['user_ques']
+            curr_user=current_user.email
+            question=Questions(user_ques,curr_user)
+            db.session.add(question)
+            db.session.commit()
+            flash('Question added successfully')
+    except Exception as e:
+        print(e)
+    return redirect(url_for('homepage'))
 
+
+#dashboard
 @app.route("/dashboard",methods=['GET','POST'])
 @login_required
 def homepage():
-    return render_template('dashboard.html')
+    allQuestions=Questions.query.all()
+    return render_template('dashboard.html',allQuestions=allQuestions)
 
-# 
+#logout
 @app.route('/logout',methods=['GET','POST'])
 @login_required
 def logout():

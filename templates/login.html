@@ -31,6 +31,21 @@
           </div>
        </div>
      </nav>
+     {% with messages = get_flashed_messages() %}
+        {% for message in messages %} 
+          {% if message=='Registration successful! You can now log in.' %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              {{messages}}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% else %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{messages}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          {% endif %}
+        {% endfor %}
+     {% endwith %}
      <section class="vh-100" >
         <div class="container py-5 h-100" >
           <div class="row d-flex justify-content-center align-items-center h-100">
