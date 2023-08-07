@@ -49,7 +49,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="popupFormModalLabel">Popup Form</h5>
+                    <h5 class="modal-title" id="popupFormModalLabel">Ask your Question</h5>
                     <button type="button" class="close" data-bs-dismiss="modal"> &times;</button>                   
                 </div>
                 <div class="modal-body">
@@ -65,46 +65,43 @@
             </div>
         </div>
     </div>
-    
-     {% for questions in allQuestions %}
-     <div class="card mb-4 mt-5" style="width: 70rem;">
+
+    {% for questions in allQuestions %}
+    <div class="card mb-4 mt-5" style="width: 70rem;">
         <div class="card-header">
           Q. {{questions.description}}
         </div>
         <div class="card-body">
           <p class="card-text">Posted by-{{questions.email}} on {{questions.ques_posted_date}}</p>
-          <a href="#" class="btn btn-primary">Add Answer</a>
+          <button class="btn btn-primary" data-bs-target="#popupForAnswer_{{questions.ques_id}}" data-bs-toggle="modal">Give Answer</button>
+          <a href="/answer/{{ questions.ques_id}}" class="btn btn-primary">See Answers</a>
+          <!-- <button class="btn btn-primary" href="/answer/{{questions.ques_id}}">View Answers</button> -->
         </div>
-      </div>
-     {% endfor %}
-     <!-- <section>
-        <div class="container mt-5">
-            <center><h2>All Questions</h2></center>
-            <br><br>
-            <table class="table table-primary table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">Question Id</th>
-                        <th scope="col">Question Description</th>
-                        <th scope="col">Date Posted</th>
-                        <th scope="col">User</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for questions in allQuestions %}
-                    <tr>
-                        <th scope="row">{{questions.ques_id}}</th>
-                        <td>{{questions.description}}</td>
-                        <td>{{questions.ques_posted_date}}</td>
-                        <td>{{questions.email}}</td>
-                    </tr>
-                        
-                    {% endfor %}
-                    
-                </tbody>
-            </table>
+    </div>
+    <!--Popup for answer-->
+    <div class="modal fade" id="popupForAnswer_{{questions.ques_id}}" tabindex="-1" role="dialog" aria-labelledby="popupForAnswerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="popupForAnswerModalLabel">Give your Answer</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal"> &times;</button>                   
+                </div>
+                <div class="modal-body">
+                    <!-- Your form content goes here -->
+                    <form action="/answerQuestion" method="post">
+                        <div class="form-group">
+                            <label for="user_input">Enter your Answer</label>
+                            <input type="hidden" name="q_id" value={{questions.ques_id}}>
+                            <input type="text" class="form-control mt-3" id="ans" name="user_ans">
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-4">Submit</button>
+                    </form>
+                </div>
+            </div>
         </div>
-     </section> -->
+    </div>
+    {% endfor %}
+     
 </body>
 </html>
 

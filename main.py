@@ -47,12 +47,26 @@ class Questions(db.Model):
     description=db.Column(db.String(600),nullable=False)
     ques_posted_date=db.Column(db.Date)
     email=db.Column(db.String(50),db.ForeignKey('User.email'),nullable=False)
+    answers=db.relationship('Answers',backref='questions')
 
     def __init__(self,description,email):
         self.description=description
         self.ques_posted_date=date.today()
         self.email=email
 
+class Answers(db.Model):
+    __tablename__ ='Answers'
+    ans_id=db.Column(db.Integer,primary_key=True)
+    ans_desc=db.Column(db.String(600),nullable=False)
+    ans_posted_date=db.Column(db.Date)
+    posted_by=db.Column(db.String(600))
+    ques_id=db.Column(db.Integer,db.ForeignKey('Questions.ques_id'),nullable=False)
+
+    def __init__(self,ans_desc,posted_by,ques_id):
+        self.ans_desc=ans_desc
+        self.ans_posted_date=date.today()
+        self.posted_by=posted_by
+        self.ques_id=ques_id
 
 #login
 @app.route("/login",methods=['GET','POST'])
@@ -120,6 +134,32 @@ def add_question():
 def homepage():
     allQuestions=Questions.query.all()
     return render_template('dashboard.html',allQuestions=allQuestions)
+
+#Add Answer
+@app.route("/answerQuestion",methods=['GET','POST'])
+@login_required
+def answer_question():
+    try:
+        if request.method=='POST':
+            user_ans=request.form['user_ans']
+            curr_user=current_user.email
+            q_id=request.form['q_id']
+            answer=Answers(user_ans,curr_user,q_id)
+            db.session.add(answer)
+            db.session.commit()
+            flash('Answer added successfully')
+    except Exception as e:
+        print(e)
+    return redirect(url_for('homepage'))
+
+#View Answers
+@app.route("/answer/<int:ques_id>",methods=['GET','POST'])
+@login_required
+def view_answers(ques_id):
+    answers = Answers.query.filter_by(ques_id=ques_id).all()
+    questions=Questions.query.get(ques_id)
+    return render_template('answers.html',questions=questions,answers=answers)
+
 
 #logout
 @app.route('/logout',methods=['GET','POST'])
