@@ -30,7 +30,7 @@ class User(db.Model,UserMixin):
     name=db.Column(db.String(50),nullable=False)
     password=db.Column(db.String(50),nullable=False)
     date_registered=db.Column(db.Date)
-    questions=db.relationship('Questions',backref='user')
+    questions=db.relationship('Questions',backref='user',cascade='all, delete-orphan')
 
     def get_id(self):
         return str(self.email)
@@ -47,7 +47,7 @@ class Questions(db.Model):
     description=db.Column(db.String(600),nullable=False)
     ques_posted_date=db.Column(db.Date)
     email=db.Column(db.String(50),db.ForeignKey('User.email'),nullable=False)
-    answers=db.relationship('Answers',backref='questions')
+    answers=db.relationship('Answers',backref='questions',cascade='all, delete-orphan')
 
     def __init__(self,description,email):
         self.description=description
@@ -160,6 +160,55 @@ def view_answers(ques_id):
     questions=Questions.query.get(ques_id)
     return render_template('answers.html',questions=questions,answers=answers)
 
+#Update Answer
+@app.route("/updateAnswer",methods=['GET','POST'])
+@login_required
+def update_answer():
+    try:
+        if request.method=='POST':
+            up_ans=request.form['up_ans']
+            ans_id=request.form['a_id']
+            updated_answer=Answers.query.get(ans_id)
+            updated_answer.ans_desc=up_ans
+            updated_answer.ans_posted_date=date.today()
+            db.session.add(updated_answer)
+            db.session.commit()
+            flash('Answer Updated successfully')
+    except Exception as e:
+        print(e)
+    return redirect(url_for('view_answers',ques_id=updated_answer.ques_id))
+    #return render_template('answer.html')
+
+#delete Answer
+@app.route("/deleteAnswer/<int:ans_id>",methods=['GET','POST'])
+@login_required
+def delete_answer(ans_id):
+    try:
+        if request.method=='GET':
+            delete_ans=Answers.query.get(ans_id)
+            ques_id=delete_ans.ques_id
+            db.session.delete(delete_ans)
+            db.session.commit()
+            flash("Answer deleted successfully")
+    except Exception as e:
+        print(e)
+    return redirect(url_for('view_answers',ques_id=ques_id))
+
+#delete Question
+@app.route("/deleteQuestion/<int:ques_id>",methods=['GET','POST'])
+@login_required
+def delete_question(ques_id):
+    try:
+        if request.method=='GET':
+            delete_ques=Questions.query.get(ques_id)
+            db.session.delete(delete_ques)
+            db.session.commit()
+            flash("Question deleted successfully")
+    except Exception as e:
+        print(e)
+    return redirect(url_for('homepage'))
+
+
 
 #logout
 @app.route('/logout',methods=['GET','POST'])
@@ -167,7 +216,6 @@ def view_answers(ques_id):
 def logout():
     logout_user()
     return redirect(url_for('login'))
-
 
 
 if __name__== "__main__":
