@@ -32,7 +32,7 @@ class User(db.Model,UserMixin):
     name=db.Column(db.String(50),nullable=False)
     password=db.Column(db.String(50),nullable=False)
     date_registered=db.Column(db.Date)
-    questions=db.relationship('Questions',backref='user',cascade='all, delete-orphan')
+    questions=db.relationship('Questions',backref='user')
 
     def get_id(self):
         return str(self.email)
@@ -49,7 +49,7 @@ class Questions(db.Model):
     description=db.Column(db.String(600),nullable=False)
     ques_posted_date=db.Column(db.Date)
     email=db.Column(db.String(50),db.ForeignKey('User.email'),nullable=False)
-    answers=db.relationship('Answers',backref='questions',cascade='all, delete-orphan')
+    answers=db.relationship('Answers',backref='questions')
 
     def __init__(self,description,email):
         self.description=description
@@ -260,6 +260,7 @@ def view_doc(filename):
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
 
 
 if __name__== "__main__":
