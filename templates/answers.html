@@ -69,12 +69,24 @@
         Q. {{questions.description}}
       </div>
     </div>
-    {%if answers%}
+    {%if answers %}
       {% for answer in answers %}
         <div class="card mb-4 mt-5" style="width: 70rem;">
           <div class="card-body">
             <p class="card-text">Posted by-{{answer.posted_by}} on {{answer.ans_posted_date}}</p>
             <p class="card-text">Solution: {{answer.ans_desc}}</p>
+            
+            <p>{% set files=file_dic[answer.ans_id] %}</p>
+            {%if files%}
+              <p>References</p>
+              {%for file in files%}
+                <li><a href="/view_doc/{{file.file_name}}" target="_blank">{{file.file_name}}</a></li>
+              {%endfor%}
+              <br>
+            {%else%}
+              <p>-- No Reference files</p>
+            {%endif%}
+            
             {% if answer.posted_by==current_user.email %}
             <button class="btn btn-warning" data-bs-target="#popupForUpdateAnswer_{{answer.ans_id}}" data-bs-toggle="modal">Update Answer</button>
             <a href="/deleteAnswer/{{answer.ans_id}}" class="btn btn-danger">Delete Answer</a>
