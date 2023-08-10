@@ -93,11 +93,13 @@
                 </div>
                 <div class="modal-body">
                     <!-- Your form content goes here -->
-                    <form action="/answerQuestion" method="post">
+                    <form action="/answerQuestion" method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="user_input">Enter your Answer</label>
                             <input type="hidden" name="q_id" value={{questions.ques_id}}>
-                            <input type="text" class="form-control mt-3" id="ans" name="user_ans" required>
+                            <input type="text" class="form-control mt-3 mb-3" id="ans" name="user_ans" required>
+                            <label for="file_input">Upload file(If Any)</label><br>
+                            <input type="file" name = "file" multiple/>
                         </div>
                         <button type="submit" class="btn btn-primary mt-4">Submit</button>
                     </form>
